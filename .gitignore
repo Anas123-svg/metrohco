@@ -1,0 +1,119 @@
+# =========================================================
+# ENVIRONMENT / SECRETS
+# =========================================================
+
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Google/service-account credentials
+/public/assets/file/696f051285557.json
+
+
+# =========================================================
+# PHP / COMPOSER
+# =========================================================
+
+/vendor/
+
+
+# =========================================================
+# NODE / FRONTEND
+# =========================================================
+
+/node_modules/
+/public/hot
+
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+
+# =========================================================
+# LARAVEL RUNTIME
+# =========================================================
+
+/storage/installed
+
+/storage/*.key
+
+/storage/logs/*
+!/storage/logs/.gitignore
+
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+
+/storage/framework/testing/*
+
+/bootstrap/cache/*.php
+
+
+# =========================================================
+# PUBLIC GENERATED FILES
+# =========================================================
+
+/public/storage/
+
+
+# =========================================================
+# TESTING
+# =========================================================
+
+.phpunit.result.cache
+.phpunit.cache/
+
+
+# =========================================================
+# DOCKER / LOCAL ENVIRONMENT
+# =========================================================
+
+docker-compose.override.yml
+
+Homestead.json
+Homestead.yaml
+
+
+# =========================================================
+# IDE
+# =========================================================
+
+.idea/
+.vscode/
+
+*.sublime-project
+*.sublime-workspace
+
+
+# =========================================================
+# OPERATING SYSTEM
+# =========================================================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+
+# =========================================================
+# TEMP / BACKUPS
+# =========================================================
+
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.swp
+
+.env.backup

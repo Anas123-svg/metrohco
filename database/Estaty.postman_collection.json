@@ -1,0 +1,1066 @@
+{
+  "info": {
+    "_postman_id": "572644ce-bf4f-4323-a880-ff96a20505ed",
+    "name": "Estaty",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23789334"
+  },
+  "item": [
+    {
+      "name": "Get Basic",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/get-basic",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "get-basic"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Home",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/home",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "home"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Language",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/get-lang?code=en",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "get-lang"
+          ],
+          "query": [
+            {
+              "key": "code",
+              "value": "en"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Signup",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/user/signup",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "signup"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Signup Submit",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "username",
+              "value": "azimsss",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "value": "goutam052597@gmail.com",
+              "type": "text"
+            },
+            {
+              "key": "password",
+              "value": "12345678",
+              "type": "text"
+            },
+            {
+              "key": "password_confirmation",
+              "value": "12345678",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/signup/submit",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "signup",
+            "submit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Login",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "username",
+              "value": "test",
+              "type": "text",
+              "uuid": "58f057d2-5599-4239-939d-b3d2f11440ca"
+            },
+            {
+              "key": "password",
+              "value": "000000",
+              "type": "text",
+              "uuid": "bd5e9f6f-788a-4217-9b05-ab356ada9b05"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/login",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Login Submit",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "username",
+              "value": "azim",
+              "type": "text"
+            },
+            {
+              "key": "password",
+              "value": "000000",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/login/submit",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "login",
+            "submit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User dashboard",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/user/dashboard",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "dashboard"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Wishlist",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/user/wishlist",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "wishlist"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Edit Profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/user/edit-profile",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "edit-profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Update Profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "name",
+              "value": "azim",
+              "type": "text"
+            },
+            {
+              "key": "username",
+              "value": "test",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "value": "test@kreativdev.com",
+              "type": "text"
+            },
+            {
+              "key": "image",
+              "type": "file",
+              "src": "/C:/Users/GoutamSharma/Downloads/Untitled design (8) (1).png"
+            },
+            {
+              "key": "phone",
+              "value": "9856231523",
+              "type": "text",
+              "uuid": "0705742b-f2a1-471b-aaad-5c15f659b4b7"
+            },
+            {
+              "key": "country",
+              "value": "BD",
+              "type": "text",
+              "uuid": "152ba406-99ab-4f7a-b371-487a4ba00bae"
+            },
+            {
+              "key": "city",
+              "value": "Dhaka",
+              "type": "text",
+              "uuid": "14cb7541-c73b-4109-9e4e-1e337000c5d7"
+            },
+            {
+              "key": "state",
+              "value": "Dhaka",
+              "type": "text",
+              "uuid": "eff6ff1c-c951-4d22-a694-db5274e84b6a"
+            },
+            {
+              "key": "zip_code",
+              "value": "1200",
+              "type": "text",
+              "uuid": "06c39497-744f-44ff-ae96-84ce624c0407"
+            },
+            {
+              "key": "address",
+              "value": "32 kreativ dev",
+              "type": "text",
+              "uuid": "1a73f0a4-775c-4f8f-a3c2-8243ee2a7d27"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/update-profile",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "update-profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Change Password",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/user/change-password",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "change-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Update Password",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "current_password",
+              "value": "0000000",
+              "type": "text"
+            },
+            {
+              "key": "new_password",
+              "value": "000000",
+              "type": "text"
+            },
+            {
+              "key": "new_password_confirmation",
+              "value": "000000",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/update-password",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "update-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Addto Wishlist",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "property_id",
+              "value": "80",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/addto/wishlist",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "addto",
+            "wishlist"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Remove Wishlist",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "property_id",
+              "value": "80",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/remove/wishlist",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "remove",
+            "wishlist"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Support Tickets",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/user/support-ticket",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "support-ticket"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Support Ticket Create",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/user/support-ticket/create",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "support-ticket",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Support Ticket Store",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "subject",
+              "value": "Test",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "value": "azimahmed11041@gmail.com",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription",
+              "type": "text"
+            },
+            {
+              "key": "attachment",
+              "type": "file",
+              "src": [
+                "/C:/Users/USER/Downloads/bulistio/bulistio_demo_3.0/index.html",
+                "/C:/Users/USER/Downloads/bulistio/bulistio_demo_3.0/assets.zip"
+              ]
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/support-ticket/store",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "support-ticket",
+            "store"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Support Ticket Messages",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/user/support-ticket/message/42",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "support-ticket",
+            "message",
+            "42"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User Support Ticket Reply",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "reply",
+              "value": "Done",
+              "type": "text"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/USER/Downloads/bulistio/bulistio_demo_3.0/assets.zip"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/user/support-ticket/reply/42",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "user",
+            "support-ticket",
+            "reply",
+            "42"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Properties",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept-Language",
+            "value": "ar",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/properties",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "properties"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "properties Details",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept-Language",
+            "value": "ar",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseURL}}/property-details/68",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "property-details",
+            "68"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Property Contact Message",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/property-contact?name=saiful islam sharif&email=azimahmed11041@gmail.com&phone=0187233757&message=Ki re kemon acos&vendor_id=0&property_id=80",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "property-contact"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "saiful islam sharif"
+            },
+            {
+              "key": "email",
+              "value": "azimahmed11041@gmail.com"
+            },
+            {
+              "key": "phone",
+              "value": "0187233757"
+            },
+            {
+              "key": "message",
+              "value": "Ki re kemon acos"
+            },
+            {
+              "key": "vendor_id",
+              "value": "0"
+            },
+            {
+              "key": "property_id",
+              "value": "80",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Projects",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/projects",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "projects"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Projects Detais",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/project-details/39",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "project-details",
+            "39"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Store Fcm Token",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "token",
+              "value": "534534534534",
+              "type": "text",
+              "uuid": "668422d9-91e9-4c9f-9d36-b70fedee2f78"
+            },
+            {
+              "key": "platform",
+              "value": "app",
+              "type": "text",
+              "uuid": "7279f4ee-856b-4f8a-982d-bb770381fb22"
+            },
+            {
+              "key": "user_id",
+              "value": "",
+              "type": "text",
+              "uuid": "a5e6c642-3ef3-47f9-934e-8c4602751c19"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseURL}}/save-fcm-token",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "save-fcm-token"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Vendor Details",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/vendor/admin",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "vendor",
+            "admin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Agent Details",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseURL}}/agent/rendall",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "agent",
+            "rendall"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-fetch authentication token for Estaty API",
+          "// This script runs before every request in the collection",
+          "",
+          "// List of endpoints that don't require authentication",
+          "const publicEndpoints = [",
+          "    '/home',",
+          "    '/properties',",
+          "    '/get-lang',",
+          "    '/user/login',",
+          "    '/user/signup',",
+          "    '/user/login/submit',",
+          "    '/user/signup/submit'",
+          "];",
+          "",
+          "// Get the current request URL",
+          "const currentUrl = pm.request.url.toString();",
+          "",
+          "// Check if current request is a public endpoint (no auth needed)",
+          "const isPublicEndpoint = publicEndpoints.some(endpoint => currentUrl.includes(endpoint));",
+          "",
+          "if (!isPublicEndpoint) {",
+          "    // Check if we have a valid token",
+          "    const token = pm.environment.get('token');",
+          "    ",
+          "    if (!token) {",
+          "        console.log('No token found. Fetching new token...');",
+          "        ",
+          "        // Get the base URL from environment",
+          "        const baseUrl = pm.environment.get('baseUrl') || pm.environment.get('baseURL');",
+          "        ",
+          "        if (!baseUrl) {",
+          "            console.error('baseUrl/baseURL environment variable is not set. Cannot fetch token.');",
+          "        } else {",
+          "            // Make login request to get token",
+          "            const loginRequest = {",
+          "                url: `${baseUrl}/user/login/submit`,",
+          "                method: 'POST',",
+          "                header: {",
+          "                    'Content-Type': 'multipart/form-data'",
+          "                },",
+          "                body: {",
+          "                    mode: 'formdata',",
+          "                    formdata: [",
+          "                        { key: 'username', value: 'test' },",
+          "                        { key: 'password', value: '000000' }",
+          "                    ]",
+          "                }",
+          "            };",
+          "            ",
+          "            pm.sendRequest(loginRequest, (error, response) => {",
+          "                if (error) {",
+          "                    console.error('Login request failed:', error);",
+          "                } else {",
+          "                    try {",
+          "                        const jsonResponse = response.json();",
+          "                        ",
+          "                        if (jsonResponse.status === 'success' && jsonResponse.token) {",
+          "                            // Store the token in environment variable",
+          "                            pm.environment.set('token', jsonResponse.token);",
+          "                            console.log('Token fetched and stored successfully!');",
+          "                        } else {",
+          "                            console.error('Login failed or no token in response:', jsonResponse);",
+          "                        }",
+          "                    } catch (e) {",
+          "                        console.error('Failed to parse login response:', e);",
+          "                    }",
+          "                }",
+          "            });",
+          "        }",
+          "    } else {",
+          "        console.log('Token exists. Using existing token.');",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
