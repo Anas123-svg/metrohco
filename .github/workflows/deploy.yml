@@ -3,7 +3,7 @@ name: Deploy Server
 on:
   push:
     branches:
-      - main  
+      - master  
 
 jobs:
   deploy:
@@ -30,4 +30,4 @@ jobs:
             cd /home/xoftkfnz/metrohco.xoftics.com
 
             # Pull the latest changes from the repository
-            git pull origin main
+            git pull origin master
