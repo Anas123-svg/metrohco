@@ -46,7 +46,7 @@ class Controller extends BaseController
 
   public function sendMailWithPhpMailer($request, $file_name, $bs, $subject, $body, $email, $name)
   {
-    //larave facade mail
+    //larave facade mail start
     if ($bs->smtp_status == 1) {
       try {
         $smtp = [
