@@ -76,7 +76,19 @@ class PropertyController extends Controller
             }
         }
 
-        $amenityInContentId = array_unique($amenityInContentId);
+        if ($request->filled('amenity_ids')) {
+            $amenityInContentId = array_merge($amenityInContentId, array_map('intval', (array) $request->input('amenity_ids', [])));
+        }
+        $amenityInContentId = array_values(array_unique(array_filter($amenityInContentId)));
+
+        $categoryIds = array_values(array_unique(array_filter(array_map('intval', (array) $request->input('category_ids', [])))));
+        $boroughs = array_values(array_unique(array_filter((array) $request->input('boroughs', []))));
+        $neighborhoods = array_values(array_unique(array_filter((array) $request->input('neighborhoods', []))));
+        $adults = $request->filled('adults') ? max(0, (int) $request->adults) : null;
+        $children = $request->filled('children') ? max(0, (int) $request->children) : null;
+        $infants = $request->filled('infants') ? max(0, (int) $request->infants) : null;
+        $petsAllowed = $request->filled('pets_allowed') ? (int) $request->pets_allowed : null;
+
         $type = null;
         if ($request->filled('type') && $request->type != 'all') {
             $type = $request->type;
@@ -193,6 +205,15 @@ class PropertyController extends Controller
             ->when($cityId, function ($query) use ($cityId) {
                 return $query->where('properties.city_id', $cityId);
             })
+            ->when(!empty($boroughs), function ($query) use ($boroughs) {
+                return $query->whereIn('properties.borough', $boroughs);
+            })
+            ->when(!empty($neighborhoods), function ($query) use ($neighborhoods) {
+                return $query->whereIn('properties.neighborhood', $neighborhoods);
+            })
+            ->when(!empty($categoryIds), function ($query) use ($categoryIds) {
+                return $query->whereIn('properties.category_id', $categoryIds);
+            })
             ->when($category && $propertyCategory, function ($query) use ($propertyCategory) {
                 return $query->where('properties.category_id', $propertyCategory->category_id);
             })
@@ -218,7 +239,7 @@ class PropertyController extends Controller
                 }
             })
 
-            ->when($min, function ($query) use ($min, $max, $price) {
+            ->when(!is_null($min) && !is_null($max), function ($query) use ($min, $max, $price) {
                 if ($price == 'fixed' || empty($price)) {
                     return $query->where('properties.price', '>=', $min)
                         ->where('properties.price', '<=', $max);
@@ -227,10 +248,22 @@ class PropertyController extends Controller
                 }
             })
             ->when($beds, function ($query) use ($beds) {
-                return $query->where('properties.beds', $beds);
+                return $query->where('properties.beds', '>=', $beds);
             })
             ->when($baths, function ($query) use ($baths) {
-                return $query->where('properties.bath', $baths);
+                return $query->where('properties.bath', '>=', $baths);
+            })
+            ->when($adults, function ($query) use ($adults) {
+                return $query->where('properties.adults', '>=', $adults);
+            })
+            ->when($children, function ($query) use ($children) {
+                return $query->where('properties.children', '>=', $children);
+            })
+            ->when($infants, function ($query) use ($infants) {
+                return $query->where('properties.infants', '>=', $infants);
+            })
+            ->when(!is_null($petsAllowed), function ($query) use ($petsAllowed) {
+                return $query->where('properties.pets_allowed', $petsAllowed);
             })
             ->when($area, function ($query) use ($area) {
                 return $query->where('properties.area', $area);
@@ -248,6 +281,7 @@ class PropertyController extends Controller
             ->select('properties.*', 'property_categories.id as categoryId', 'property_contents.title', 'property_contents.slug', 'property_contents.address', 'property_contents.description', 'property_contents.language_id')
             ->orderBy($order_by_column, $order)
             ->paginate(12);
+        $property_contents->appends($request->query());
         $information['property_contents'] = $property_contents;
         $information['contents'] = $property_contents;
 

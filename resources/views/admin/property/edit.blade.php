@@ -329,6 +329,12 @@
                                             </div>
                                         </div>
                                     @endif
+                                    @if ($property->type == 'residential')
+                                        <div class="col-lg-3"><div class="form-group"><label>{{ __('Adult Capacity') }}</label><input type="number" min="0" class="form-control" name="adults" value="{{ old('adults', $property->adults) }}" placeholder="Adults"></div></div>
+                                        <div class="col-lg-3"><div class="form-group"><label>{{ __('Child Capacity') }}</label><input type="number" min="0" class="form-control" name="children" value="{{ old('children', $property->children) }}" placeholder="Children"></div></div>
+                                        <div class="col-lg-3"><div class="form-group"><label>{{ __('Infant Capacity') }}</label><input type="number" min="0" class="form-control" name="infants" value="{{ old('infants', $property->infants) }}" placeholder="Infants"></div></div>
+                                        <div class="col-lg-3"><div class="form-group"><label>{{ __('Pets Allowed') }}</label><select class="form-control" name="pets_allowed"><option value="0" {{ old('pets_allowed', $property->pets_allowed) == 0 ? 'selected' : '' }}>{{ __('No') }}</option><option value="1" {{ old('pets_allowed', $property->pets_allowed) == 1 ? 'selected' : '' }}>{{ __('Yes') }}</option></select></div></div>
+                                    @endif
 
                                     <div class="col-lg-3">
                                         <div class="form-group">
@@ -350,22 +356,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label>{{ __('Latitude') }} *</label>
-                                            <input type="text" class="form-control" value="{{ $property->latitude }}"
-                                                name="latitude" placeholder="Enter Latitude">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label>{{ __('Longitude') }} *</label>
-                                            <input type="text" class="form-control"
-                                                value="{{ $property->longitude }}" name="longitude"
-                                                placeholder="Enter Longitude">
-                                        </div>
-                                    </div>
+                                    @include('admin.property.partials.metro-location-picker', ['property' => $property])
 
                                     <div class="col-lg-3">
                                         <div class="form-group">

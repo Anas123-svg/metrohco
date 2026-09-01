@@ -20,14 +20,90 @@
 @endsection
 @section('style')
     <meta http-equiv="Cache-Control" content="no-store" />
+    <style>
+        .metro-results-map-wrap {
+            position: relative;
+            overflow: hidden;
+            background: #eef1f1;
+        }
+        .metro-results-map-stage {
+            /* The parent uses a ratio::before spacer. Absolute positioning is
+             * required here; percentage heights on an auto-height ratio box can
+             * otherwise collapse Google Maps to 0px on some browsers. */
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 260px;
+        }
+        .metro-results-map-stage #main-map {
+            width: 100%;
+            height: 100%;
+            min-height: 260px;
+            background: #eef1f1;
+        }
+        @media (max-width: 575.98px) {
+            .metro-results-map-stage,
+            .metro-results-map-stage #main-map { min-height: 300px; }
+        }
+        .metro-map-area-summary {
+            position: absolute;
+            z-index: 5;
+            left: 16px;
+            top: 16px;
+            max-width: calc(100% - 32px);
+            padding: 10px 12px;
+            border: 1px solid rgba(31,31,31,.08);
+            border-radius: 9px;
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 10px 28px rgba(31,31,31,.13);
+            backdrop-filter: blur(8px);
+        }
+        .metro-map-area-label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--color-medium);
+            font-size: 9px;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: .08em;
+        }
+        .metro-map-area-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .metro-map-pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 25px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: var(--color-secondary);
+            color: #fff;
+            font-size: 10px;
+            line-height: 1.1;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        @media (max-width: 575.98px) {
+            .metro-map-area-summary { left: 10px; top: 10px; max-width: calc(100% - 20px); }
+        }
+    </style>
 @endsection
 @section('content')
     <!-- Map Start-->
     <div class="map-area border-top header-next pt-30">
         <!-- Background Image -->
         <div class="container">
-            <div class="lazy-container radius-md ratio border">
-                <div id="main-map"></div>
+            <div class="lazy-container radius-md ratio border metro-results-map-wrap">
+                <div class="metro-results-map-stage">
+                    <div id="main-map"></div>
+                    <div class="metro-map-area-summary" id="metroMapAreaSummary" hidden>
+                        <span class="metro-map-area-label">SEARCH AREA</span>
+                        <div class="metro-map-area-pills" id="metroMapAreaPills"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -446,15 +522,6 @@
 @endsection
 
 @section('script')
-    <script>
-        'use strict';
-        var property_contents = @json($property_contents);
-        var properties = property_contents.data;
-    </script>
-    <!-- Leaflet Map JS -->
-    <script src="{{ asset('/assets/front/js/vendors/leaflet.js') }}"></script>
-    <script src="{{ asset('/assets/front/js/vendors/leaflet.markercluster.js') }}"></script>
-    <!-- Map JS -->
-    <script src="{{ asset('/assets/front/js/map.js') }}"></script>
+    @include('frontend.property.partials.metro-results-map')
     <script src="{{ asset('/assets/front/js/properties.js') }}"></script>
 @endsection

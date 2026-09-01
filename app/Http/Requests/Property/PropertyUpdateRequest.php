@@ -54,6 +54,12 @@ class PropertyUpdateRequest extends FormRequest
             'amenities' => 'required',
             'category_id' => 'required',
             'city_id' => 'required',
+            'borough' => 'required|string|max:100',
+            'neighborhood' => 'required|string|max:150',
+            'adults' => 'nullable|integer|min:0|max:99',
+            'children' => 'nullable|integer|min:0|max:99',
+            'infants' => 'nullable|integer|min:0|max:99',
+            'pets_allowed' => 'nullable|boolean',
             'latitude' => ['required', 'numeric', 'regex:/^[-]?((([0-8]?[0-9])\.(\d+))|(90(\.0+)?))$/'],
             'longitude' => ['required', 'numeric', 'regex:/^[-]?((([1]?[0-7]?[0-9])\.(\d+))|([0-9]?[0-9])\.(\d+)|(180(\.0+)?))$/']
 

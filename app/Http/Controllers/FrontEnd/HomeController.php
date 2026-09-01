@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use Session;
 use Carbon\Carbon;
 use App\Models\Vendor;
+use App\Models\Amenity;
 use App\Models\Package;
 use App\Models\Journal\Blog;
 use Illuminate\Http\Request;
@@ -128,6 +129,10 @@ class HomeController extends Controller
     }])->get();
     $queryResult['property_categories'] = $proeprty_categories;
     $queryResult['all_proeprty_categories'] = $all_proeprty_categories;
+
+    $queryResult['amenities'] = Amenity::where('status', 1)->with(['amenityContent' => function ($q) use ($language) {
+      $q->where('language_id', $language->id);
+    }])->orderBy('serial_number')->get();
 
     $properties = Property::where([['properties.status', 1], ['properties.approve_status', 1]])
       ->where('property_contents.language_id', $language->id)
@@ -265,6 +270,11 @@ class HomeController extends Controller
     $max = Property::where([['status', 1], ['approve_status', 1]])->max('price');
     $queryResult['min'] = intval($min);
     $queryResult['max'] = intval($max);
+
+    $queryResult['sale_min'] = intval(Property::where([['status', 1], ['approve_status', 1], ['purpose', 'sale']])->min('price') ?? 0);
+    $queryResult['sale_max'] = intval(Property::where([['status', 1], ['approve_status', 1], ['purpose', 'sale']])->max('price') ?? 0);
+    $queryResult['rent_min'] = intval(Property::where([['status', 1], ['approve_status', 1], ['purpose', 'rent']])->min('price') ?? 0);
+    $queryResult['rent_max'] = intval(Property::where([['status', 1], ['approve_status', 1], ['purpose', 'rent']])->max('price') ?? 0);
 
 
     if ($themeVersion == 1) {
