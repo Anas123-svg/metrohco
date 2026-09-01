@@ -45,6 +45,8 @@
         --metro-dark: var(--color-dark, #1f1f1f);
         --metro-medium: var(--color-medium, #6f7478);
         --metro-border: var(--border-color, #e7e7e7);
+        --metro-outline: 2px;
+        --metro-radius: 10px;
         position: relative;
         z-index: 20;
         display: grid !important;
@@ -59,11 +61,11 @@
         padding: 0;
         margin: 42px 0 0;
         background: var(--color-white, #fff);
-        border: 1px solid var(--metro-secondary);
+        border: var(--metro-outline) solid var(--metro-secondary);
         /* The top-left corner belongs to the attached Buy/Rent tab. Keeping
          * the shell square here makes the outer teal boundary one continuous
          * line, matching MetroHCO old. */
-        border-radius: 0 10px 10px 10px;
+        border-radius: 0 var(--metro-radius) var(--metro-radius) var(--metro-radius);
         box-shadow: 0 20px 55px rgba(31, 31, 31, .13);
         isolation: isolate;
     }
@@ -86,73 +88,117 @@
     }
 
 
+    /* =========================================================
+       BUY / RENT — pixel-stable border geometry
+       ========================================================= */
+
     .metro-mode {
         position: absolute;
-        left: -1px;
-        top: -42px;
+
+        /*
+         * Anchor the tabs to the shell's PADDING edge and move them left by
+         * exactly the same value as the shell border. Using bottom:100% avoids
+         * top/translate calculations, so the join stays stable at browser zoom.
+         */
+        left: calc(0px - var(--metro-outline));
+        top: auto;
+        bottom: 100%;
+
         z-index: 4;
+
         display: inline-flex !important;
         align-items: flex-end;
+
         gap: 0;
         min-width: 0;
+
         margin: 0;
         padding: 0;
+
         background: transparent;
+        border: 0;
         border-radius: 0;
+
         overflow: visible;
-    }
-
-    /* Exact old-MetroHCO left boundary: the first tab and the body share
-     * the same x-coordinate, with no rounded-shell gap at their junction. */
-    .metro-mode > .metro-mode-btn:first-child {
-        border-top-left-radius: 10px;
-    }
-
-    .metro-mode > .metro-mode-btn:first-child.active {
-        box-shadow: -1px 0 0 var(--metro-secondary);
     }
 
     .metro-mode-btn {
         position: relative;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
         min-width: 78px;
         min-height: 42px;
         padding: 0 17px;
-        border: 1px solid transparent;
-        border-bottom: 0;
-        border-radius: 10px 10px 0 0;
+
+        /*
+         * INACTIVE STATE by default:
+         * only the bottom edge exists. It sits exactly over the shell top edge.
+         */
+        border: 0;
+        border-bottom: var(--metro-outline) solid var(--metro-secondary);
+
+        border-radius: var(--metro-radius) var(--metro-radius) 0 0;
+
         background: #f1e4de;
         color: var(--metro-dark);
+
         font-size: 12px;
+        line-height: 1;
         font-weight: 700;
         letter-spacing: .01em;
-        transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease;
+
+        cursor: pointer;
+
+        /* No transforms: transforms are the main source of zoom seams. */
+        transform: none;
+
+        transition:
+            color .2s ease,
+            background .2s ease;
+
         box-shadow: none;
     }
 
     .metro-mode-btn + .metro-mode-btn {
-        margin-left: -1px;
+        margin-left: 0;
     }
 
-    .metro-mode-btn + .metro-mode-btn::before {
+    .metro-mode-btn::before,
+    .metro-mode-btn::after {
         content: none;
+    }
+
+    .metro-mode-btn:not(.active) {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: var(--metro-outline) solid var(--metro-secondary);
+        background: #f1e4de;
+        z-index: 1;
     }
 
     .metro-mode-btn.active {
         color: var(--metro-dark);
         background: #fff;
-        border-color: var(--metro-secondary);
-        border-bottom-color: #fff;
-        transform: translateY(1px);
-        z-index: 2;
+
+        /* SELECTED STATE: top + left + right only. */
+        border-top: var(--metro-outline) solid var(--metro-secondary);
+        border-left: var(--metro-outline) solid var(--metro-secondary);
+        border-right: var(--metro-outline) solid var(--metro-secondary);
+        border-bottom: 0;
+
+        border-radius: var(--metro-radius) var(--metro-radius) 0 0;
+
+        transform: none;
+        z-index: 3;
+        box-shadow: none;
     }
 
     .metro-mode-btn:not(.active):hover {
         background: #ebddd6;
-    }
-
-    .metro-mode-btn.active::before,
-    .metro-mode-btn.active + .metro-mode-btn::before {
-        opacity: 0;
     }
 
     .metro-control {
@@ -678,6 +724,21 @@
         accent-color: var(--metro-primary);
     }
 
+    /*
+     * Single-row desktop: Borough occupies the actual bottom-left corner.
+     * Match the shell's inner radius (outer radius minus the 2px outline).
+     */
+    @media (min-width: 1200px) {
+        .metro-control[data-control="borough"],
+        .metro-control[data-control="borough"] .metro-field {
+            border-bottom-left-radius: calc(var(--metro-radius) - var(--metro-outline));
+        }
+
+        .metro-control[data-control="borough"] {
+            overflow: hidden;
+        }
+    }
+
     /* Laptop / small desktop: intentional two-row layout. */
     @media (max-width: 1199px) {
         .metro-search-shell {
@@ -689,14 +750,15 @@
             gap: 8px;
             padding: 8px;
             margin-top: 38px;
-            border-width: 1px;
-            border-radius: 0 10px 10px 10px;
+            border-width: var(--metro-outline);
+            border-radius: 0 var(--metro-radius) var(--metro-radius) var(--metro-radius);
             background: rgba(255, 255, 255, .98);
         }
 
         .metro-mode {
-            left: 0;
-            top: -38px;
+            left: calc(0px - var(--metro-outline));
+            top: auto;
+            bottom: 100%;
         }
 
         .metro-control,
@@ -711,9 +773,22 @@
             min-height: 38px;
             min-width: 74px;
             padding: 0 15px;
-            border-width: 1px;
+            transform: none;
+        }
+
+        .metro-mode-btn:not(.active) {
+            border-top: 0;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: var(--metro-outline) solid var(--metro-secondary);
+        }
+
+        .metro-mode-btn.active {
+            border-top: var(--metro-outline) solid var(--metro-secondary);
+            border-left: var(--metro-outline) solid var(--metro-secondary);
+            border-right: var(--metro-outline) solid var(--metro-secondary);
             border-bottom: 0;
-            border-radius: 9px 9px 0 0;
+            transform: none;
         }
 
         .metro-field {
@@ -761,6 +836,8 @@
         .metro-mode {
             position: relative;
             top: auto;
+            right: auto;
+            bottom: auto;
             left: auto;
             display: grid !important;
             grid-area: mode;
@@ -786,6 +863,15 @@
             font-size: 12px;
             letter-spacing: .04em;
             transform: none;
+        }
+
+        .metro-mode-btn + .metro-mode-btn {
+            margin-left: 0;
+        }
+
+        .metro-mode-btn:not(.active) {
+            border: 0;
+            background: transparent;
         }
 
         .metro-mode-btn.active {
