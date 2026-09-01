@@ -33,51 +33,174 @@
     // MetroHCO / Estaty results-map base style supplied for this project.
     // Kept local to this map so it is deterministic and does not depend on
     // Cloud Map Styling configuration attached to a Google Map ID.
-    const METRO_MAP_STYLE = [
+    // Base map styling. Road geometry is appended separately according to zoom,
+    // because fixed screen-pixel road weights become visually heavy when zoomed out.
+    const METRO_MAP_BASE_STYLE = [
         // Global geometry + soft label treatment.
         { featureType: 'all', elementType: 'geometry', stylers: [{ visibility: 'on' }] },
         { featureType: 'all', elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
         { featureType: 'all', elementType: 'labels.text.fill', stylers: [{ color: '#6B7280' }] },
         { featureType: 'all', elementType: 'labels.text.stroke', stylers: [{ color: '#FFFFFF' }, { weight: 0.8 }, { visibility: 'on' }] },
 
-        // Administrative text stays visible, but much lighter than before.
+        // Administrative labels stay visible, while local/neighbourhood geometry
+        // remains hidden to prevent thick non-selected zone boundaries.
+        { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ visibility: 'on' }, { color: '#D3D8DC' }, { weight: 0.28 }] },
         { featureType: 'administrative.province', elementType: 'all', stylers: [{ visibility: 'off' }] },
+        { featureType: 'administrative.locality', elementType: 'geometry', stylers: [{ visibility: 'off' }] },
         { featureType: 'administrative.locality', elementType: 'labels', stylers: [{ visibility: 'on' }] },
         { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#4B5563' }] },
-        { featureType: 'administrative.locality', elementType: 'labels.text.stroke', stylers: [{ color: '#FFFFFF' }, { weight: 0.9 }] },
+        { featureType: 'administrative.locality', elementType: 'labels.text.stroke', stylers: [{ color: '#FFFFFF' }, { weight: 0.65 }] },
+        { featureType: 'administrative.neighborhood', elementType: 'geometry', stylers: [{ visibility: 'off' }] },
         { featureType: 'administrative.neighborhood', elementType: 'labels', stylers: [{ visibility: 'on' }] },
         { featureType: 'administrative.neighborhood', elementType: 'labels.text.fill', stylers: [{ color: '#70757A' }] },
-        { featureType: 'administrative.neighborhood', elementType: 'labels.text.stroke', stylers: [{ color: '#FFFFFF' }, { weight: 0.7 }] },
+        { featureType: 'administrative.neighborhood', elementType: 'labels.text.stroke', stylers: [{ color: '#FFFFFF' }, { weight: 0.55 }] },
 
-        // Clean white land with softer boundaries.
+        // Clean land / low visual noise.
         { featureType: 'landscape', elementType: 'all', stylers: [{ visibility: 'on' }] },
         { featureType: 'landscape', elementType: 'geometry.fill', stylers: [{ color: '#FFFFFF' }, { lightness: 100 }, { gamma: 1.15 }] },
-        { featureType: 'landscape', elementType: 'geometry.stroke', stylers: [{ visibility: 'on' }, { color: '#D7D7D7' }, { weight: 0.45 }] },
-
-        // Remove POI noise, especially when zoomed out.
+        { featureType: 'landscape', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
         { featureType: 'poi', elementType: 'all', stylers: [{ visibility: 'off' }] },
 
-        // Keep roads recognisable but reduce visual weight substantially.
+        // Road labels/strokes are always suppressed. Only lightweight fills are
+        // introduced by getMetroMapStyle() below.
         { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] },
         { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
-        { featureType: 'road.highway', elementType: 'geometry.fill', stylers: [{ color: '#DCE486' }, { weight: 1.35 }, { gamma: 1 }, { lightness: -8 }] },
-        { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
-        { featureType: 'road.highway.controlled_access', elementType: 'geometry.fill', stylers: [{ color: '#B9B9B9' }, { weight: 0.7 }] },
-        { featureType: 'road.highway.controlled_access', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
-        { featureType: 'road.arterial', elementType: 'geometry.fill', stylers: [{ color: '#79C887' }, { weight: 0.85 }, { lightness: -12 }] },
-        { featureType: 'road.arterial', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
-        { featureType: 'road.local', elementType: 'geometry.fill', stylers: [{ color: '#D3D3D3' }, { weight: 0.55 }] },
-        { featureType: 'road.local', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
 
-        // Transit stays visible but subdued.
-        { featureType: 'transit.line', elementType: 'geometry.fill', stylers: [{ color: '#DCA3A3' }, { gamma: 1 }, { weight: 0.7 }] },
-        { featureType: 'transit.line', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
+        // Transit stations remain hidden. Transit lines are also zoom-aware below.
         { featureType: 'transit.station', elementType: 'all', stylers: [{ visibility: 'off' }] },
 
-        // Keep the supplied blue water identity.
+        // Water remains recognisable without competing with the selection layer.
         { featureType: 'water', elementType: 'geometry.fill', stylers: [{ color: '#3F819C' }] },
         { featureType: 'water', elementType: 'labels', stylers: [{ visibility: 'off' }] },
     ];
+
+    function getRoadZoomBucket(zoom) {
+        const z = Number(zoom ?? 10);
+        if (z <= 5) return 'world';
+        if (z <= 7) return 'country';
+        if (z <= 9) return 'region';
+        if (z <= 11) return 'city';
+        if (z <= 13) return 'district';
+        return 'street';
+    }
+
+    function getMetroMapStyle(zoom) {
+        const bucket = getRoadZoomBucket(zoom);
+
+        // Hide lower-level roads entirely at wide zooms instead of allowing lots
+        // of tiny fixed-width lines to merge into thick bands.
+        const roadProfiles = {
+            world: {
+                highway: { visibility: 'off', weight: 0 },
+                controlled: { visibility: 'off', weight: 0 },
+                arterial: { visibility: 'off', weight: 0 },
+                local: { visibility: 'off', weight: 0 },
+                transit: { visibility: 'off', weight: 0 },
+            },
+            country: {
+                highway: { visibility: 'on', weight: 0.18 },
+                controlled: { visibility: 'on', weight: 0.12 },
+                arterial: { visibility: 'off', weight: 0 },
+                local: { visibility: 'off', weight: 0 },
+                transit: { visibility: 'off', weight: 0 },
+            },
+            region: {
+                highway: { visibility: 'on', weight: 0.28 },
+                controlled: { visibility: 'on', weight: 0.18 },
+                arterial: { visibility: 'on', weight: 0.12 },
+                local: { visibility: 'off', weight: 0 },
+                transit: { visibility: 'off', weight: 0 },
+            },
+            city: {
+                highway: { visibility: 'on', weight: 0.42 },
+                controlled: { visibility: 'on', weight: 0.28 },
+                arterial: { visibility: 'on', weight: 0.22 },
+                local: { visibility: 'off', weight: 0 },
+                transit: { visibility: 'on', weight: 0.12 },
+            },
+            district: {
+                highway: { visibility: 'on', weight: 0.58 },
+                controlled: { visibility: 'on', weight: 0.38 },
+                arterial: { visibility: 'on', weight: 0.34 },
+                local: { visibility: 'on', weight: 0.16 },
+                transit: { visibility: 'on', weight: 0.20 },
+            },
+            street: {
+                highway: { visibility: 'on', weight: 0.78 },
+                controlled: { visibility: 'on', weight: 0.50 },
+                arterial: { visibility: 'on', weight: 0.46 },
+                local: { visibility: 'on', weight: 0.28 },
+                transit: { visibility: 'on', weight: 0.28 },
+            },
+        };
+
+        const p = roadProfiles[bucket];
+        return [
+            ...METRO_MAP_BASE_STYLE,
+
+            // Highways keep a muted version of the existing warm tone.
+            {
+                featureType: 'road.highway',
+                elementType: 'geometry.fill',
+                stylers: [
+                    { visibility: p.highway.visibility },
+                    { color: bucket === 'street' || bucket === 'district' ? '#DCE486' : '#D9DDB0' },
+                    { weight: p.highway.weight },
+                    { gamma: 1 },
+                    { lightness: bucket === 'street' ? -5 : 4 },
+                ],
+            },
+            { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
+
+            {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry.fill',
+                stylers: [
+                    { visibility: p.controlled.visibility },
+                    { color: '#C9CBCC' },
+                    { weight: p.controlled.weight },
+                ],
+            },
+            { featureType: 'road.highway.controlled_access', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
+
+            // Arterials only appear once the map is close enough for them to add
+            // useful context. Their green is desaturated at wider zoom levels.
+            {
+                featureType: 'road.arterial',
+                elementType: 'geometry.fill',
+                stylers: [
+                    { visibility: p.arterial.visibility },
+                    { color: bucket === 'street' || bucket === 'district' ? '#8BC795' : '#B4CFB8' },
+                    { weight: p.arterial.weight },
+                    { lightness: 0 },
+                ],
+            },
+            { featureType: 'road.arterial', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
+
+            {
+                featureType: 'road.local',
+                elementType: 'geometry.fill',
+                stylers: [
+                    { visibility: p.local.visibility },
+                    { color: '#D7D9DA' },
+                    { weight: p.local.weight },
+                ],
+            },
+            { featureType: 'road.local', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
+
+            {
+                featureType: 'transit.line',
+                elementType: 'geometry.fill',
+                stylers: [
+                    { visibility: p.transit.visibility },
+                    { color: '#D8B4B4' },
+                    { gamma: 1 },
+                    { weight: p.transit.weight },
+                ],
+            },
+            { featureType: 'transit.line', elementType: 'geometry.stroke', stylers: [{ visibility: 'off' }] },
+        ];
+    }
 
     // Highlight palette intentionally uses the same two brand colors as the MSB:
     // secondary = structural outline/borough emphasis, primary = selected area accent.
@@ -86,13 +209,34 @@ const HIGHLIGHT_THEME = {
     fillOpacity: 0.14,
 
     stroke: '#FE7501',
-    strokeOpacity: 0.95,
-    strokeWeight: 2,
+    strokeOpacity: 0.78,
 
     hoverFillOpacity: 0.22,
-    hoverStrokeOpacity: 1,
-    hoverStrokeWeight: 2.4,
+    hoverStrokeOpacity: 0.90,
 };
+
+// Polygon strokes are screen-pixel based in Google Maps. A fixed 2px border
+// therefore feels increasingly heavy as the map gets closer. Keep it crisp
+// at city scale, then progressively thin it as the user zooms in.
+function getHighlightStrokeWeight(zoom, hovered = false) {
+    const z = Number(zoom ?? 10);
+    let weight;
+
+    if (z >= 18) weight = 0.50;
+    else if (z >= 16) weight = 0.60;
+    else if (z >= 14) weight = 0.72;
+    else if (z >= 12) weight = 0.86;
+    else if (z >= 10) weight = 1.00;
+    else weight = 1.10;
+
+    return hovered ? Math.min(weight + 0.18, 1.22) : weight;
+}
+
+function getHighlightStrokeOpacity(zoom, hovered = false) {
+    const z = Number(zoom ?? 10);
+    const base = z >= 16 ? 0.66 : z >= 13 ? 0.72 : HIGHLIGHT_THEME.strokeOpacity;
+    return hovered ? Math.min(base + 0.12, HIGHLIGHT_THEME.hoverStrokeOpacity) : base;
+}
     // These datasets are byte-for-byte copies of metrohco_old/public/frontend/assets/coordinates.
     const boroughData = {
         'Manhattan': ManhattanData.flatMap(item => item.neighborhoods || []),
@@ -288,12 +432,8 @@ const HIGHLIGHT_THEME = {
             zoomControl: true,
             clickableIcons: false,
             gestureHandling: 'greedy',
-            styles: METRO_MAP_STYLE,
+            styles: getMetroMapStyle(10),
             backgroundColor: '#ffffff',
-            restriction: {
-                latLngBounds: { north: 45.2, south: 39.5, east: -71.2, west: -80.0 },
-                strictBounds: false,
-            },
         };
         // Do not set mapId here: Google Cloud Map Styling can override/disable
         // a local styles[] array. The results map must use the supplied JSON exactly.
@@ -312,6 +452,7 @@ const HIGHLIGHT_THEME = {
 
         const polygonBounds = new google.maps.LatLngBounds();
         const polygonInfo = new google.maps.InfoWindow();
+        const selectedPolygons = [];
 
         selectedAreas.forEach(area => {
             const parts = area.type === 'borough' ? area.parts : [area.coordinates];
@@ -333,8 +474,8 @@ const polygon = new google.maps.Polygon({
      * Purple fill + deep-purple boundary.
      */
     strokeColor: HIGHLIGHT_THEME.stroke,
-    strokeOpacity: boroughOnly ? 0 : HIGHLIGHT_THEME.strokeOpacity,
-    strokeWeight: boroughOnly ? 0 : HIGHLIGHT_THEME.strokeWeight,
+    strokeOpacity: boroughOnly ? 0 : getHighlightStrokeOpacity(map.getZoom()),
+    strokeWeight: boroughOnly ? 0 : getHighlightStrokeWeight(map.getZoom()),
 
     fillColor: HIGHLIGHT_THEME.fill,
     fillOpacity: HIGHLIGHT_THEME.fillOpacity,
@@ -344,15 +485,18 @@ const polygon = new google.maps.Polygon({
     zIndex: boroughOnly ? 2 : 3,
 });
 
+polygon.__metroHovered = false;
+selectedPolygons.push({ polygon, boroughOnly });
 coordinates.forEach(coord => polygonBounds.extend(coord));
                 // Neighbourhood hover stays restrained: stronger fill/border, no rainbow
                 // colors, so selected geography still belongs to the Estaty visual system.
 if (!boroughOnly) {
     polygon.addListener('mouseover', event => {
+        polygon.__metroHovered = true;
         polygon.setOptions({
             fillOpacity: HIGHLIGHT_THEME.hoverFillOpacity,
-            strokeOpacity: HIGHLIGHT_THEME.hoverStrokeOpacity,
-            strokeWeight: HIGHLIGHT_THEME.hoverStrokeWeight,
+            strokeOpacity: getHighlightStrokeOpacity(map.getZoom(), true),
+            strokeWeight: getHighlightStrokeWeight(map.getZoom(), true),
         });
 
         polygonInfo.setContent(`
@@ -398,15 +542,41 @@ if (!boroughOnly) {
     });
 
     polygon.addListener('mouseout', () => {
+        polygon.__metroHovered = false;
         polygon.setOptions({
             fillOpacity: HIGHLIGHT_THEME.fillOpacity,
-            strokeOpacity: HIGHLIGHT_THEME.strokeOpacity,
-            strokeWeight: HIGHLIGHT_THEME.strokeWeight,
+            strokeOpacity: getHighlightStrokeOpacity(map.getZoom()),
+            strokeWeight: getHighlightStrokeWeight(map.getZoom()),
         });
 
         polygonInfo.close();
     });
 }            });
+        });
+
+        // Keep selected boundaries visually consistent at every zoom. Google Maps
+        // uses screen-pixel stroke widths, so without this adjustment a border that
+        // looks right at NYC scale becomes too dominant at street/building scale.
+        let currentRoadZoomBucket = getRoadZoomBucket(map.getZoom());
+        map.addListener('zoom_changed', () => {
+            const zoom = map.getZoom();
+
+            // Update road density/weight only when crossing a zoom bucket. This keeps
+            // the map responsive while preventing highways and streets from turning
+            // into thick bands at state/country/world scales.
+            const nextRoadZoomBucket = getRoadZoomBucket(zoom);
+            if (nextRoadZoomBucket !== currentRoadZoomBucket) {
+                currentRoadZoomBucket = nextRoadZoomBucket;
+                map.setOptions({ styles: getMetroMapStyle(zoom) });
+            }
+
+            selectedPolygons.forEach(({ polygon, boroughOnly }) => {
+                if (boroughOnly) return;
+                polygon.setOptions({
+                    strokeOpacity: getHighlightStrokeOpacity(zoom, polygon.__metroHovered),
+                    strokeWeight: getHighlightStrokeWeight(zoom, polygon.__metroHovered),
+                });
+            });
         });
 
         const markerBounds = new google.maps.LatLngBounds();
