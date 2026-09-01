@@ -66,3 +66,10 @@ php artisan view:clear
 - The Google results-map stage now absolutely fills Estaty's ratio wrapper to prevent a zero-height map.
 - Google Maps loader reuses an existing API script when present and handles missing/invalid configuration gracefully.
 - Empty/null/invalid property coordinates are ignored instead of generating invalid markers.
+
+## Results map visual theme update (2026-09-01)
+- Search-results Google Map now uses the supplied local JSON style array exactly.
+- The results map intentionally does not attach the Cloud Map ID, because Cloud Map Styling can override local `styles[]` rules. The admin map picker is unchanged.
+- Borough-only highlighting uses the Estaty secondary brand color as a restrained translucent wash with no internal neighbourhood strokes.
+- Explicit neighbourhood selection uses the Estaty primary brand color for fill and the secondary brand color for the boundary, with a restrained hover state.
+- Property markers now use the same primary/secondary brand palette instead of Google's default red pin.
