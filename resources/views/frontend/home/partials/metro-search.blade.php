@@ -57,7 +57,7 @@
         max-width: 1220px;
         min-height: 82px;
         padding: 0;
-        margin: 42px 0 0;
+        margin: 88px 0 0;
         background: var(--color-white, #fff);
         border: 2px solid var(--metro-secondary);
         /* The top-left corner belongs to the attached Buy/Rent tab. Keeping
