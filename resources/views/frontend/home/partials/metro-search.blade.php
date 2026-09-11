@@ -2219,6 +2219,487 @@
     }
 </style>
 
+
+
+<style id="metro-mobile-responsive-final">
+    /* Keep the text-only price summary out of the visual layout.
+       The button aria-label is updated by JS, so this span is not needed visually. */
+    #metroSearchForm .metro-price-accessible {
+        display: none !important;
+    }
+
+    /* ================================================================
+       FINAL MOBILE / TABLET RESPONSIVE HARDENING
+       This layer intentionally comes last so older responsive rules do
+       not override touch sizing, dropdown geometry or narrow-screen flow.
+       Desktop (>= 1200px) is untouched.
+       ================================================================ */
+
+    @media (max-width: 768px) {
+        .metro-msb-host {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            overflow: visible !important;
+        }
+
+        #metroSearchForm.metro-search-shell {
+            display: flex !important;
+            flex-direction: column !important;
+            flex-wrap: nowrap !important;
+            align-items: stretch !important;
+            gap: 8px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            height: auto !important;
+            min-height: 0 !important;
+            margin: 16px auto 0 !important;
+            padding: 10px !important;
+            box-sizing: border-box !important;
+            overflow: visible !important;
+            background: #f5f5f5 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        #metroSearchForm .metro-mode {
+            position: static !important;
+            inset: auto !important;
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+            flex: 0 0 auto !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            height: 52px !important;
+            min-height: 52px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            gap: 0 !important;
+            overflow: hidden !important;
+            background: #fff !important;
+            border: 1px solid #000 !important;
+            border-radius: 0 !important;
+        }
+
+        #metroSearchForm .metro-mode-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 12px !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            transform: none !important;
+            box-shadow: none !important;
+            font-size: 24px !important;
+            line-height: 1 !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #metroSearchForm .metro-mode-btn + .metro-mode-btn {
+            border-left: 1px solid #000 !important;
+        }
+
+        #metroSearchForm .metro-control,
+        #metroSearchForm .metro-search-btn {
+            flex: 0 0 auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        #metroSearchForm .metro-control {
+            height: 54px !important;
+            min-height: 54px !important;
+            overflow: visible !important;
+            background: #fff !important;
+            border: 0 !important;
+        }
+
+        #metroSearchForm .metro-field,
+        #metroSearchForm .metro-price-trigger {
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            height: 54px !important;
+            min-height: 54px !important;
+            margin: 0 !important;
+            padding: 0 42px 0 14px !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+            background: #fff !important;
+            border: 1px solid #cfcfcf !important;
+            border-radius: 0 !important;
+            color: #000 !important;
+            text-align: left !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #metroSearchForm .metro-field-value {
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+            color: #000 !important;
+            font-size: 17px !important;
+            line-height: 1 !important;
+            font-weight: 700 !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+
+        #metroSearchForm .metro-field-label {
+            display: none !important;
+        }
+
+        #metroSearchForm .metro-control:not([data-control="price"]) .metro-field::after {
+            content: "" !important;
+            position: absolute !important;
+            top: 50% !important;
+            right: 15px !important;
+            width: 9px !important;
+            height: 9px !important;
+            margin: -7px 0 0 !important;
+            border: 0 !important;
+            border-right: 2px solid #000 !important;
+            border-bottom: 2px solid #000 !important;
+            transform: rotate(45deg) !important;
+            pointer-events: none !important;
+        }
+
+        #metroSearchForm .metro-control.open:not([data-control="price"]) .metro-field::after {
+            margin-top: -2px !important;
+            transform: rotate(225deg) !important;
+        }
+
+        #metroSearchForm .metro-price-trigger {
+            padding: 0 !important;
+        }
+
+        #metroSearchForm .metro-price-trigger::after {
+            content: none !important;
+        }
+
+        #metroSearchForm .metro-price-trigger-part,
+        #metroSearchForm .metro-price-trigger-mid {
+            display: flex !important;
+            align-items: center !important;
+            height: 52px !important;
+            min-height: 52px !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+            background: #fff !important;
+            color: #000 !important;
+            font-size: 17px !important;
+            line-height: 1 !important;
+            font-weight: 700 !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+
+        #metroSearchForm .metro-price-trigger-part {
+            flex: 1 1 0 !important;
+            padding: 0 12px !important;
+            border-right: 1px solid #d8d8d8 !important;
+        }
+
+        #metroSearchForm .metro-price-trigger-mid {
+            flex: 0 0 42px !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            border-right: 1px solid #d8d8d8 !important;
+        }
+
+        #metroSearchForm #metroPriceMaxField {
+            border-right: 0 !important;
+        }
+
+        #metroSearchForm .metro-search-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            height: 56px !important;
+            min-height: 56px !important;
+            padding: 0 18px !important;
+            background: #000 !important;
+            color: #fff !important;
+            border: 1px solid #000 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            font-size: 25px !important;
+            line-height: 1 !important;
+            transform: none !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #metroSearchForm .metro-search-btn svg {
+            display: none !important;
+        }
+
+        /* Portaled dropdowns become viewport-safe mobile sheets. */
+        body .metro-dropdown,
+        body .metro-dropdown.wide,
+        body .metro-dropdown.right,
+        body .metro-dropdown-panel,
+        body .metro-dropdown-price,
+        body .metro-dropdown-more {
+            box-sizing: border-box !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            overscroll-behavior: contain !important;
+            touch-action: pan-y !important;
+            border: 1px solid #000 !important;
+            border-radius: 0 !important;
+            box-shadow: 0 12px 32px rgba(0,0,0,.18) !important;
+            scrollbar-gutter: stable !important;
+        }
+
+        body .metro-dropdown-panel .metro-panel-toolbar {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 5 !important;
+            padding: 10px 14px 0 !important;
+            background: #f8f8f8 !important;
+        }
+
+        body .metro-dropdown-panel .metro-panel-search-row {
+            min-height: 50px !important;
+            grid-template-columns: 18px minmax(0, 1fr) 44px !important;
+            column-gap: 8px !important;
+        }
+
+        body .metro-dropdown-panel .metro-drop-search {
+            min-width: 0 !important;
+            height: 50px !important;
+            font-size: 19px !important;
+        }
+
+        body .metro-dropdown-panel .metro-panel-close {
+            width: 44px !important;
+            height: 44px !important;
+            touch-action: manipulation !important;
+        }
+
+        body .metro-dropdown-panel .metro-panel-section-title {
+            padding: 12px 14px 9px !important;
+            font-size: 16px !important;
+        }
+
+        body .metro-dropdown-panel .metro-option-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 14px 14px !important;
+            box-sizing: border-box !important;
+        }
+
+        body .metro-dropdown-panel .metro-option,
+        body .metro-dropdown-panel .metro-empty {
+            min-width: 0 !important;
+            min-height: 72px !important;
+            padding: 12px 8px !important;
+            font-size: 16px !important;
+            line-height: 1.05 !important;
+            overflow-wrap: anywhere !important;
+        }
+
+        body .metro-dropdown-price .metro-price-values {
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+            gap: 8px !important;
+            margin: 16px 14px 14px !important;
+        }
+
+        body .metro-dropdown-price .metro-price-box {
+            min-width: 0 !important;
+            padding: 10px !important;
+        }
+
+        body .metro-dropdown-price .metro-price-box strong {
+            font-size: 17px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+
+        body .metro-dropdown-price .metro-range-wrap {
+            margin: 10px 21px 18px !important;
+        }
+
+        body .metro-dropdown-price .metro-presets {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            padding: 0 14px 14px !important;
+        }
+
+        body .metro-dropdown-price .metro-preset {
+            min-height: 46px !important;
+            padding: 8px !important;
+            font-size: 14px !important;
+            touch-action: manipulation !important;
+        }
+
+        body .metro-dropdown-more .metro-more-section {
+            padding: 13px 14px !important;
+        }
+
+        body .metro-dropdown-more .metro-more-row {
+            gap: 10px !important;
+        }
+
+        body .metro-dropdown-more .metro-qty button,
+        body .metro-dropdown-more .metro-pets button {
+            min-width: 44px !important;
+            min-height: 44px !important;
+            touch-action: manipulation !important;
+        }
+
+        body .metro-dropdown-more .metro-amenities {
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+        }
+
+        body .metro-dropdown-more .metro-check {
+            min-height: 32px !important;
+            align-items: center !important;
+            font-size: 14px !important;
+        }
+
+        body .metro-dropdown-more .metro-check input {
+            width: 18px !important;
+            height: 18px !important;
+            margin: 0 !important;
+        }
+
+        .metro-msb-backdrop.show {
+            background: rgba(0,0,0,.28) !important;
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+        }
+    }
+
+    /* Narrow phones: one option per row and tighter typography. */
+    @media (max-width: 540px) {
+        #metroSearchForm.metro-search-shell {
+            gap: 7px !important;
+            padding: 8px !important;
+            margin-top: 12px !important;
+        }
+
+        #metroSearchForm .metro-mode-btn {
+            font-size: 22px !important;
+        }
+
+        #metroSearchForm .metro-field-value,
+        #metroSearchForm .metro-price-trigger-part,
+        #metroSearchForm .metro-price-trigger-mid {
+            font-size: 16px !important;
+        }
+
+        body .metro-dropdown-panel .metro-option-grid {
+            grid-template-columns: 1fr !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            padding-bottom: 10px !important;
+        }
+
+        body .metro-dropdown-panel .metro-option,
+        body .metro-dropdown-panel .metro-empty {
+            min-height: 60px !important;
+            font-size: 15px !important;
+        }
+    }
+
+    /* Very small phones (320-360px class): prevent price and filter controls
+       from ever creating horizontal overflow. */
+    @media (max-width: 360px) {
+        #metroSearchForm.metro-search-shell {
+            padding: 7px !important;
+        }
+
+        #metroSearchForm .metro-field,
+        #metroSearchForm .metro-price-trigger {
+            height: 52px !important;
+            min-height: 52px !important;
+        }
+
+        #metroSearchForm .metro-field-value,
+        #metroSearchForm .metro-price-trigger-part,
+        #metroSearchForm .metro-price-trigger-mid {
+            font-size: 15px !important;
+        }
+
+        #metroSearchForm .metro-price-trigger-mid {
+            flex-basis: 34px !important;
+        }
+
+        #metroSearchForm .metro-price-trigger-part {
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+        }
+
+        body .metro-dropdown-price .metro-price-values {
+            gap: 5px !important;
+            margin-left: 10px !important;
+            margin-right: 10px !important;
+        }
+
+        body .metro-dropdown-price .metro-price-box {
+            padding: 8px !important;
+        }
+
+        body .metro-dropdown-price .metro-presets {
+            grid-template-columns: 1fr !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+    }
+
+    /* Short landscape phones: maximize usable vertical space in dropdowns. */
+    @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+        body .metro-dropdown,
+        body .metro-dropdown.wide,
+        body .metro-dropdown.right {
+            max-height: calc(100dvh - 12px) !important;
+        }
+
+        body .metro-dropdown-panel .metro-option,
+        body .metro-dropdown-panel .metro-empty {
+            min-height: 52px !important;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .metro-dropdown,
+        .metro-search-btn,
+        .metro-field,
+        .metro-mode-btn {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+</style>
+
 <div class="metro-msb-backdrop" id="metroMsbBackdrop" aria-hidden="true"></div>
 
 <form id="metroSearchForm" class="metro-search-shell" action="{{ route('frontend.properties') }}" method="get" autocomplete="off">
@@ -2420,7 +2901,7 @@
     let activeControl = null;
     let positionFrame = null;
 
-    const isCompactViewport = () => window.matchMedia('(max-width: 767px)').matches;
+    const isCompactViewport = () => window.matchMedia('(max-width: 768px)').matches;
 
     const getDropdown = control => control?.__metroDropdown || control?.querySelector('.metro-dropdown') || null;
 
@@ -2484,21 +2965,32 @@
         const dropdown = getDropdown(activeControl);
         if (!trigger || !dropdown) return;
 
-        const vw = document.documentElement.clientWidth;
-        const vh = window.innerHeight || document.documentElement.clientHeight;
-        const edge = isCompactViewport() ? 10 : 12;
-        const gap = isCompactViewport() ? 10 : 9;
+        // visualViewport keeps dropdowns correctly positioned when a mobile
+        // browser's address bar or on-screen keyboard changes the visible area.
+        const viewport = window.visualViewport;
+        const vw = Math.round(viewport?.width || document.documentElement.clientWidth);
+        const vh = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight);
+        const viewportLeft = Math.round(viewport?.offsetLeft || 0);
+        const viewportTop = Math.round(viewport?.offsetTop || 0);
+        const edge = isCompactViewport() ? 8 : 12;
+        const gap = isCompactViewport() ? 8 : 9;
 
         dropdown.style.right = 'auto';
         if (isCompactViewport()) {
             const width = Math.max(0, vw - edge * 2);
-            const maxHeight = Math.max(180, Math.min(vh - edge * 2, Math.round(vh * .76), 580));
+            const maxHeight = Math.max(160, Math.min(vh - edge * 2, Math.round(vh * .82), 620));
             dropdown.style.width = `${width}px`;
             dropdown.style.maxWidth = `${width}px`;
             dropdown.style.maxHeight = `${maxHeight}px`;
-            dropdown.style.left = `${edge}px`;
-            dropdown.style.top = 'auto';
-            dropdown.style.bottom = `${edge}px`;
+            dropdown.style.left = `${viewportLeft + edge}px`;
+            dropdown.style.right = 'auto';
+            dropdown.style.bottom = 'auto';
+
+            // Anchor the panel inside the currently visible viewport. This avoids
+            // the iOS/Android keyboard covering the bottom of a location search.
+            const actualHeight = Math.min(dropdown.scrollHeight, maxHeight);
+            const top = Math.max(viewportTop + edge, viewportTop + vh - edge - actualHeight);
+            dropdown.style.top = `${top}px`;
             return;
         }
 
@@ -2582,7 +3074,13 @@
     backdrop?.addEventListener('click', () => closeAll());
     document.addEventListener('click', () => closeAll());
     window.addEventListener('resize', requestDropdownPosition, { passive: true });
+    window.addEventListener('orientationchange', requestDropdownPosition, { passive: true });
     window.addEventListener('scroll', requestDropdownPosition, { passive: true, capture: true });
+    window.visualViewport?.addEventListener('resize', requestDropdownPosition, { passive: true });
+    window.visualViewport?.addEventListener('scroll', requestDropdownPosition, { passive: true });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && activeControl) closeAll();
+    });
 
     const summary = (items, empty) => items.length === 0 ? empty : items.length === 1 ? items[0] : `${items.length} selected`;
     const updateMoreSummary = () => {
